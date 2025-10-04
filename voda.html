@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceramics Projects</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+  /* Body + gradient background */
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #4e4e4e);
+  }
+
+  /* Navbar same as main page */
+/* Floating Navbar */
+.floating-navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+
+    display: flex;
+    gap: 20px;
+    font-weight: bold;
+
+    flex-wrap: nowrap;       /* prevent wrapping to next line */
+    white-space: nowrap;     /* prevent link text from breaking */
+    justify-content: center; /* center links horizontally */
+}
+
+.floating-navbar a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.floating-navbar a:hover {
+    color: #007bff;
+}
+
+
+  /* Page Header */
+.plumbing-header {
+    position: relative;
+    text-align: center;
+    padding: 120px 20px 80px 20px;
+    background: linear-gradient(135deg, #e0f7ffdc, #f0fbff00);
+    overflow: hidden;
+}
+
+/* Abstract pipe lines */
+.plumbing-header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+        linear-gradient(45deg, rgba(0,123,255,0.05) 2px, transparent 2px),
+        linear-gradient(-45deg, rgba(0,123,255,0.05) 2px, transparent 2px),
+        radial-gradient(circle, rgba(0,123,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Text stays above background */
+.plumbing-header h1,
+.plumbing-header p {
+    position: relative;
+    z-index: 1;
+    color: #0d6efd;
+}
+
+.plumbing-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.plumbing-header p {
+    color: #333;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+  /* Asymmetrical Gallery */
+/* Gallery grid */
+.ceramics-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-auto-rows: 120px;
+    gap: 10px;
+    grid-auto-flow: dense;
+    padding: 20px;
+}
+
+/* Desktop: asymmetrical collage */
+@media(min-width: 900px) {
+    .ceramics-gallery .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(2) { grid-column: span 1; grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(3) { grid-column: span 1; grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(4) { grid-column: span 2; grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(5) { grid-column: span 1; grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(6) { grid-column: span 1; grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(7) { grid-column: span 2; grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(8) { grid-column: span 1; grid-row: span 1; }
+}
+
+/* Tablet and Mobile: maintain asymmetry */
+@media(max-width: 900px) {
+    .ceramics-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 120px;
+    }
+
+    /* Different row spans for asymmetry */
+    .ceramics-gallery .gallery-item:nth-child(1) { grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(2) { grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(3) { grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(4) { grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(5) { grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(6) { grid-row: span 1; }
+    .ceramics-gallery .gallery-item:nth-child(7) { grid-row: span 2; }
+    .ceramics-gallery .gallery-item:nth-child(8) { grid-row: span 1; }
+}
+
+/* Images fill container */
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    display: block;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.gallery-item img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+
+/* Lightbox styles */
+#lightbox {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 15px;
+}
+
+.footer {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+    color: #f8f9fa;
+    font-size: 0.95rem;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    overflow: hidden; /* keeps rounded corners clean */
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.4);
+}
+
+/* Subtle diagonal ceramic lines */
+.footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+   background: linear-gradient(to bottom right, #000000, #52525216);
+    
+    background-size: 100px 100px; /* adjust line spacing */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Content layering */
+.footer .container {
+    position: relative;
+    z-index: 1; /* keeps text above pattern */
+}
+
+/* Headings */
+.footer h5 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Links */
+.footer a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: #0d6efd; /* blue accent */
+}
+
+/* Icons */
+.footer i {
+    color: #0d6efd;
+    margin-right: 8px;
+}
+
+.history-section {
+    max-width: 900px;         /* keeps text readable */
+    margin: 0 auto;            /* centers the section */
+    color: #333;               /* dark text for readability */
+}
+
+.history-section h2 {
+    font-weight: 700;
+    color: #0d6efd;            /* Bootstrap primary color accent */
+}
+
+.history-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;               /* softer dark gray for paragraph */
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- Navbar (floating) -->
+<nav class="floating-navbar">
+  <a href="index.html">Home</a>
+    <a href="ceramics.html">Tiles</a>
+  <a href="voda.html">Plumbing</a>
+  <a href="index.html#contact">Contact</a>
+</nav>
+
+<!-- Page Header -->
+<section class="plumbing-header">
+  <h1>Plumbing Projects</h1>
+  <p>a showcase of professional services</p>
+</section>
+
+<!-- Gallery -->
+<section class="ceramics-gallery">
+<div class="gallery-item"><img src="voda/IMG-20251001-WA0063.jpg" alt="Ceramic 1"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0050.jpg" alt="Ceramic 2"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0049.jpg" alt="Ceramic 3"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0031.jpg" alt="Ceramic 4"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0032.jpg" alt="Ceramic 5"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0037.jpg" alt="Ceramic 6"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0041.jpg" alt="Ceramic 7"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0042.jpg" alt="Ceramic 8"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0043.jpg" alt="Ceramic 8"onclick="openLightbox(this)"></div>
+  <div class="gallery-item"><img src="voda/IMG-20251001-WA0064.jpg" alt="Ceramic 8"onclick="openLightbox(this)"></div>
+
+  <div class="gallery-item"><img src= alt="Ceramic 9"onclick="openLightbox(this)"></div>
+
+
+
+
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="">
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer bg-dark text-light pt-5 pb-4">
+  <div class="container">
+    <div class="row gy-4">
+      
+      <!-- About -->
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-3">Hope you like it</h5>
+      </div>
+
+
+    </div>
+
+    <hr class="bg-light mt-4">
+    <div class="text-center">
+      <small>© 2025 Mehmed Abidini</small>
+    </div>
+  </div>
+</footer>
+<script>
+    function openLightbox(img) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    lightboxImg.src = img.src;
+    lightbox.style.display = 'flex';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+</script>
+</body>
+</html>

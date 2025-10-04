@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Overlap Scroll</title>
+<!-- Bootstrap CSS -->
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden;
+       
+    }
+
+    /* Floating Navbar */
+    /* Floating Navbar */
+.floating-navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+
+    display: flex;
+    gap: 20px;
+    font-weight: bold;
+
+    flex-wrap: nowrap;       /* prevent wrapping to next line */
+    white-space: nowrap;     /* prevent link text from breaking */
+    justify-content: center; /* center links horizontally */
+}
+
+.floating-navbar a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.floating-navbar a:hover {
+    color: #007bff;
+}
+.hero-text {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 100px 20px;
+    color: #222;
+    position: relative;
+    background: rgba(255, 255, 255, 0.672); /* subtle overlay for readability */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* Headline */
+.hero-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInUp 1s forwards 0.3s;
+}
+
+/* Paragraphs */
+.hero-text p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+.hero-text p:nth-of-type(2) { animation-delay: 0.6s; }
+
+/* Highlighted words */
+.hero-text .highlight {
+    color: #0d6efd; /* blue accent */
+    font-weight: 600;
+}
+
+.hero-text .highlight-name {
+    color: #0d6efd; /* red/pink accent for name */
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.hero-text .highlight-action {
+    color: #0d6efd; /* green accent for action */
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Bootstrap Icons */
+.hero-text .icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    vertical-align: middle;
+    color: #0d6efd;
+    animation: bounce 2s infinite;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle bounce for icons */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Responsive adjustments */
+@media(max-width: 600px) {
+    .hero-text h1 { font-size: 2rem; }
+    .hero-text p { font-size: 1rem; }
+    .hero-text { padding: 60px 15px; }
+}
+
+
+    /* Sections */
+ #about {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url('bcg.png') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#about::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4); /* dark overlay */
+    z-index: -1; /* sit behind text */
+}
+
+
+    #projects {
+        position: relative;
+        background: linear-gradient(to bottom right, #ffffff, #525252);
+        padding: 100px 20px 50px 20px;
+        z-index: 1;
+        margin-top: 100vh; /* starts below the fixed about section */
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    }
+    
+
+    /* Card Layout - stacked vertically */
+    .project-card {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        background: #fff;
+        border-radius: 17px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 50px;
+        cursor: pointer;
+        transition: transform 0.3s;
+        max-width: 700px;
+        margin: 40px auto;
+        display: flex;
+        justify-content: center;
+        
+    }
+    .project-card:hover {
+        transform: scale(1.02);
+    }
+
+.project-card {
+    display: flex;
+    flex-wrap: nowrap;      /* keep them side by side */
+    align-items: stretch;   /* make both same height */
+}
+
+.card-images {
+    flex: 1 1 50%;          /* take half of the card */
+    max-width: 50%;         /* never exceed half */
+    aspect-ratio: auto;     /* let height be controlled by flex */
+    height: auto;
+    position: relative;
+}
+
+.card-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      /* fills its side completely */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.card-images img.active {
+    opacity: 1;
+}
+
+.card-text {
+    flex: 1 1 50%;       /* keep same layout */
+    max-width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* Visual styling */
+    background: rgba(255, 255, 255, 0.85);  /* subtle overlay for readability */
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.card-text:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments for screens below 500px */
+@media (max-width: 500px) {
+    .card-text {
+        flex: 1 1 100%;       /* full width */
+        max-width: 100%;
+        padding: 20px;        /* smaller padding */
+    }
+
+    .card-text h3 {
+        font-size: 1.4rem;    /* smaller title */
+    }
+
+    .card-text p {
+        font-size: 1rem;      /* smaller paragraph */
+    }
+
+    .card-text i {
+        font-size: 1rem;      /* smaller icons */
+    }
+}
+
+
+.card-text h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    gap: 10px;  /* space between icon and text */
+}
+
+.card-text p {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.card-text .highlight-action {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+/* Bootstrap icons inside card-text */
+.card-text i {
+    color: #0d6efd;
+    vertical-align: middle;
+}
+
+.footer {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+    color: #f8f9fa;
+    font-size: 0.95rem;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    overflow: hidden; /* keeps rounded corners clean */
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.4);
+}
+
+/* Subtle diagonal ceramic lines */
+.footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+   background: linear-gradient(to bottom right, #000000, #52525216);
+    
+    background-size: 100px 100px; /* adjust line spacing */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Content layering */
+.footer .container {
+    position: relative;
+    z-index: 1; /* keeps text above pattern */
+}
+
+/* Headings */
+.footer h5 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Links */
+.footer a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: #0d6efd; /* blue accent */
+}
+
+/* Icons */
+.footer i {
+    color: #0d6efd;
+    margin-right: 8px;
+}
+
+.history-section {
+    max-width: 900px;         /* keeps text readable */
+    margin: 0 auto;            /* centers the section */
+    color: #333;               /* dark text for readability */
+}
+
+.history-section h2 {
+    font-weight: 700;
+    color: #0d6efd;            /* Bootstrap primary color accent */
+}
+
+.history-section p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;               /* softer dark gray for paragraph */
+}
+
+.family-journey {
+    background: linear-gradient(120deg, #fdfcfb, #e2d1c3); /* warm, subtle ceramic feel */
+    padding: 80px 20px;
+    position: relative;
+    border-radius: 20px;
+}
+
+.family-journey h2 {
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.family-journey p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.family-journey .highlight-name {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+.family-journey .highlight-age {
+    color: #333;
+    font-weight: 600;
+}
+
+.family-journey .highlight-skill {
+    color: #333;
+    font-weight: 600;
+    position: relative;
+}
+
+.family-journey .highlight-action {
+    color: #333;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Optional subtle background lines for “ceramic feel” */
+.family-journey::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+                      linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size: 40px 40px; /* tile size effect */
+    pointer-events: none; /* so it doesn’t interfere with text */
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- Floating Navbar -->
+<div class="floating-navbar">
+    <a href="#about">Home</a>
+    <a href="ceramics.html">Tiles</a>
+  <a href="voda.html">Plumbing</a>
+    <a href="#contact">Contact</a>
+</div>
+
+<!-- About Section -->
+<section id="about">
+    
+ <div class="hero-text">
+    <h1>Hello, I'm <span class="highlight-name">Mehmed Abidini</span></h1>
+
+    <p class="experience">
+        <i class="bi bi-laptop icon"></i> <span class="highlight">Computer Science</span> student with hands-on experience in 
+        <i class="bi bi-bricks icon"></i> <span class="highlight">ceramics</span>, 
+        <i class="bi bi-bucket icon"></i> <span class="highlight">bathroom & kitchen design</span>, and 
+        <i class="bi bi-tools icon"></i> <span class="highlight">plumbing projects</span>.
+    </p>
+
+    <p class="subtext">
+        <i class="bi bi-star icon"></i> This webpage is created to <span class="highlight-action">showcase our work</span> and share our story.
+    </p>
+</div>
+
+    
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="container">
+
+<!-- History Section -->
+<section class="family-journey">
+    <div class="container text-center">
+        <h2 class="mb-3">Our Family Business Journey</h2>
+        <p class="lead">
+            I started working <span class="highlight-age">since I was 16 years old</span>, part-time and later full-time, 
+            alongside my father, <span class="highlight-name">Nuridin Abidini</span>, the head of our company. 
+            Together we learned the <span class="highlight-skill">art of ceramic installations</span>, 
+            <span class="highlight-skill">bathroom and kitchen designs</span>, 
+            and <span class="highlight-skill">plumbing projects</span>.
+        </p>
+        <p class="lead">
+            This hands-on experience, implementing both indoor and outdoor projects, shaped my practical skills and complements 
+            my computer science studies, fueling my passion for <span class="highlight-action">design and implementation</span>.
+        </p>
+     <p class="lead">
+        <span class="highlight-skill">Bellow you can list through a Gallery of our work</span>,
+     </p> 
+
+    </div>
+</section>
+
+
+
+    <!-- Ceramics Card -->
+    <div class="project-card" onclick="location.href='ceramics.html'">
+        <div class="card-images" id="ceramics-carousel">
+            <img src="keramika/20250915_172548.jpg" class="active" alt="Ceramic 1">
+            <img src="keramika/IMG-20251001-WA0062.jpg" alt="Ceramic 2">
+            <img src="keramika/IMG-20251001-WA0015.jpg" alt="Ceramic 3">
+        </div>
+       <div class="card-text">
+    <h3><i class="bi bi-grid-1x2-fill"></i> Ceramic Projects</h3>
+    <p>Click to <span class="highlight-action">see more details</span> </p>
+    <p><i class="bi bi-arrow-right-circle-fill"></i></p>
+</div>
+
+    </div>
+
+    <!-- Plumbing Card -->
+    <div class="project-card" onclick="location.href='voda.html'">
+        <div class="card-images" id="plumbing-carousel">
+            <img src="voda/IMG-20251001-WA0041.jpg" class="active" alt="Plumbing 1">
+            <img src="voda/IMG-20251001-WA0063.jpg" alt="Plumbing 2">
+            <img src="voda/IMG-20251001-WA0050.jpg" alt="Plumbing 3">
+        </div>
+       <div class="card-text">
+    <h3><i class="bi bi-tools"></i> Plumbing Projects</h3>
+    <p>Click to <span class="highlight-action">see more details</span> </p>
+    <p><i class="bi bi-arrow-right-circle-fill"></i></p>
+</div>
+
+    </div>
+
+<!-- Footer -->
+<footer id="contact" class="footer bg-dark text-light pt-5 pb-4">
+  <div class="container">
+    <div class="row gy-4">
+      
+      <!-- About -->
+    <!--   <div class="col-md-4">
+        <h5 class="fw-bold mb-3">About Me</h5>
+        <p>I’m passionat tiles & plumbing to modern web development. Let’s connect!</p>
+      </div> -->
+
+      <!-- Contact Info -->
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-3">Contact</h5>
+        <ul class="list-unstyled">
+          <li><i class="bi bi-envelope me-2"></i>
+            <a href="abidinimehmed@gmail.com" class="text-light">abidinimehmed@gmail.com</a>
+          </li>
+          <li><i class="bi bi-whatsapp me-2"></i>
+            <a href="https://wa.me/352661300393" target="_blank" class="text-light">+352661300393</a>
+          </li>
+          <li><i class="bi bi-github me-2"></i>
+            <a href="https://github.com/mortred003" target="_blank" class="text-light">github.com/yourusername</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-3">Send a Message</h5>
+        <form action="mailto:abidinimehmed@gmail.com" method="POST" enctype="text/plain">
+          <div class="mb-3">
+            <input type="text" class="form-control form-control-sm" name="name" placeholder="Your Name" required>
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control form-control-sm" name="email" placeholder="Your Email" required>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control form-control-sm" name="message" rows="3" placeholder="Message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm w-100">Send</button>
+        </form>
+      </div>
+
+    </div>
+
+    <hr class="bg-light mt-4">
+    <div class="text-center">
+      <small>© 2025 Mehmed Abidini </small>
+    </div>
+  </div>
+</footer>
+
+</section>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Carousel Function
+    function initCarousel(carouselId) {
+        const images = document.querySelectorAll(`#${carouselId} img`);
+        let current = 0;
+        setInterval(() => {
+            images[current].classList.remove('active');
+            current = (current + 1) % images.length;
+            images[current].classList.add('active');
+        }, 3000); // 3 seconds
+    }
+
+    initCarousel('ceramics-carousel');
+    initCarousel('plumbing-carousel');
+</script>
+
+</body>
+</html>
